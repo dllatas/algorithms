@@ -1,4 +1,4 @@
-package main
+package mergesort
 
 import (
 	"reflect"
@@ -6,6 +6,7 @@ import (
 )
 
 func TestMergeSort(t *testing.T) {
+	var debug = false
 	var tests = []struct {
 		input []int
 		want  []int
@@ -45,7 +46,7 @@ func TestMergeSort(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got := mergeSort(tt.input)
+		got := mergeSort(tt.input, len(tt.input), debug)
 
 		if !(reflect.DeepEqual(got, tt.want)) {
 			t.Errorf("got %v, want %vf", got, tt.want)

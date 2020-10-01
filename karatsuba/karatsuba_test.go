@@ -1,4 +1,4 @@
-package main
+package karatsuba
 
 import (
 	"testing"
@@ -38,7 +38,9 @@ func TestKaratsuba(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got := karatsuba(tt.multiplicand, tt.multiplier)
+		var operD = newOperand(tt.multiplicand, 0)
+		var operR = newOperand(tt.multiplier, 0)
+		got := karatsuba(operD, operR)
 		if got != tt.want {
 			t.Errorf("got %f, want %f", got, tt.want)
 		}

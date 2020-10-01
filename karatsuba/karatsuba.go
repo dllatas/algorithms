@@ -1,88 +1,141 @@
-package main
+package karatsuba
 
 import (
+	"log"
 	"math"
 	"strconv"
 )
 
-func rpad(s string, pad string, plength int) string {
-	for i := len(s); i < plength; i++ {
-		s = s + pad
-	}
-	return s
+// Check that size of operands is lower than two
+const lowerSize = 2
+const padChar = "0"
+
+type operand struct {
+	value string
+	size  int
 }
 
-func split(operand string, point int) (string, string) {
-	var highString = operand[0:point]
-	var lowString = operand[point:]
+func newOperand(value string, size int) operand {
+	if size != 0 {
+		return operand{
+			value: value,
+			size:  size,
+		}
+	}
+	return operand{
+		value: value,
+		size:  len(value),
+	}
+}
 
-	var highLen = len(highString)
-	var lowLen = len(lowString)
+func rpad(s string, size int, pad string, plength int) (string, int) {
+	var counter = 0
+	for i := size; i < plength; i++ {
+		s = s + pad
+		counter = counter + 1
+	}
+	return s, counter
+}
+
+func split(operand operand, point int) (operand, operand) {
+	var highPad = 0
+	var lowPad = 0
+
+	var highString = operand.value[:point]
+	var lowString = operand.value[point:]
+
+	var highLen = point
+	var lowLen = operand.size - point
 
 	if highLen != lowLen {
 		var size = highLen
 		if highLen < lowLen {
 			size = lowLen
 		}
-		highString = rpad(highString, "0", size)
-		lowString = rpad(lowString, "0", size)
+		highString, highPad = rpad(highString, highLen, padChar, size)
+		lowString, lowPad = rpad(lowString, lowLen, padChar, size)
 	}
 
-	return highString, lowString
+	var high = newOperand(highString, highLen+highPad)
+	var low = newOperand(lowString, lowLen+lowPad)
+
+	return high, low
 }
 
-func sumOperands(multiplicand string, multiplier string) string {
-	var a, _ = strconv.ParseFloat(multiplicand, 64)
-	var b, _ = strconv.ParseFloat(multiplier, 64)
-	var sum = a + b
-	var sumString = strconv.FormatFloat(sum, 'f', -1, 64)
-	return sumString
-}
-
-func karatsuba(multiplicand string, multiplier string) float64 {
-	// Check that size of operands is lower than two
-	var lowerSize = 2
-
-	// Calculate length of operands
-	var multiplicandSize = len(multiplicand)
-	var multiplierSize = len(multiplier)
-
-	if multiplicandSize < lowerSize || multiplierSize < lowerSize {
-		var a, _ = strconv.ParseFloat(multiplicand, 64)
-		var b, _ = strconv.ParseFloat(multiplier, 64)
-		var product = a * b
-		return product
+func sum(operD operand, operR operand) operand {
+	var result = apply([]operand{operD, operR}, "+")
+	var resultString = strconv.FormatFloat(result, 'f', -1, 64)
+	return operand{
+		value: resultString,
+		size:  len(resultString),
 	}
+}
 
-	// Choose the lowest one
+func getMinSize(multiplicandSize, multiplierSize int) int {
 	var minSize = multiplicandSize
 	if multiplicandSize > multiplierSize {
 		minSize = multiplierSize
 	}
+	return minSize
+}
+
+func getSplitPoint(minSize int) int {
+	var minSizeFloat = float64(minSize)
+	var halfMinSize = minSizeFloat / 2.0
+	var floor = math.Floor(halfMinSize)
+	return int(floor)
+}
+
+func apply(operands []operand, operation string) float64 {
+	var result = 0.0
+	for index, operand := range operands {
+		var parsed, _ = strconv.ParseFloat(operand.value, 64)
+		switch operation {
+		case "+":
+			result = result + parsed
+		case "*":
+			if index == 0 {
+				result = parsed
+				continue
+			}
+			result = result * parsed
+		default:
+			log.Printf("Operation not supported: %s\n", operation)
+		}
+	}
+	return result
+}
+
+func karatsuba(operD operand, operR operand) float64 {
+	if operD.size < lowerSize || operR.size < lowerSize {
+		var product = apply([]operand{operD, operR}, "*")
+		return product
+	}
+
+	// Choose the lowest one
+	var minSize = getMinSize(operD.size, operR.size)
 
 	// Find split point
-	var splitPoint = int(math.Floor(float64(minSize) / 2.0))
+	var splitPoint = getSplitPoint(minSize)
 
 	// Split string at split point
-	highMultiplicand, lowMultiplicand := split(multiplicand, splitPoint)
-	highMultiplier, lowMultiplier := split(multiplier, splitPoint)
+	dHigh, dLow := split(operD, splitPoint)
+	rHigh, rLow := split(operR, splitPoint)
 
 	// Sum multiplicand and multiplier to calculate v1
-	var sumMultiplicand = sumOperands(highMultiplicand, lowMultiplicand)
-	var sumMultiplier = sumOperands(highMultiplier, lowMultiplier)
+	var sumD = sum(dHigh, dLow)
+	var sumR = sum(rHigh, rLow)
 
 	// Recursive calls to karatsuba
-	var z0 = karatsuba(lowMultiplicand, lowMultiplier)
-	var v1 = karatsuba(sumMultiplicand, sumMultiplier)
-	var v2 = karatsuba(highMultiplicand, highMultiplier)
+	var z0 = karatsuba(dLow, rLow)
+	var v1 = karatsuba(sumD, sumR)
+	var v2 = karatsuba(dHigh, rHigh)
 
 	// calculate z1: v1 - v2 - z0
 	var z1 = ((v1 - v2) - z0) * math.Pow10(splitPoint)
 
-	// calculate z2
 	var z2 = v2 * math.Pow10(splitPoint*2)
 
 	var result = (z2 + z1) + z0
-
 	return result
 }

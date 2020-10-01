@@ -1,4 +1,4 @@
-package main
+package division
 
 func division(dividend int, divisor int) (int, int) {
 	if divisor > dividend {

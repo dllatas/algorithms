@@ -1,16 +1,15 @@
-package main
+package collatz
 
 func collatz(input int) (int, []int) {
 	if input == 1 {
 		return 1, []int{input}
 	}
 
-	var transformed = 0
+	var transformed = (3 * input) + 1
 	var remainder = input % 2
+
 	if remainder == 0 {
 		transformed = input / 2
-	} else {
-		transformed = (3 * input) + 1
 	}
 
 	iteration, serie := collatz(transformed)

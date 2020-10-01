@@ -4,6 +4,7 @@ import (
 	"log"
 )
 
+// top-down
 func memoizationMain(input int, debug bool) int {
 	memo := make([]int, input+1)
 	return memoization(input, memo, debug)

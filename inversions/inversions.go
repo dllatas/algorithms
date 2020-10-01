@@ -1,44 +1,45 @@
-package main
+package inversion
 
 type inversion struct {
 	sorted []int
 	count  int
 }
 
-func split(input []int) ([]int, []int) {
-	var length = len(input)
+func split(input []int, length int) ([]int, int, []int, int) {
 	var pivot = length / 2
 
 	var left = input[:pivot]
 	var right = input[pivot:]
 
-	return left, right
+	return left, pivot, right, length - pivot
 }
 
 // sort and merge happen at the same time
-func count(left []int, right []int) inversion {
+func count(left []int, leftLen int, right []int, rightLen int) inversion {
 	var sorted []int
 	var count = 0
 
-	for !(len(left) == 0 || len(right) == 0) {
+	for !(leftLen == 0 || rightLen == 0) {
 		if left[0] <= right[0] {
 			sorted = append(sorted, left[0])
 			left = left[1:]
+			leftLen = leftLen - 1
 		} else {
 			sorted = append(sorted, right[0])
 			right = right[1:]
-			count = count + len(left)
+			count = count + leftLen
+			rightLen = rightLen - 1
 		}
 	}
 
 	// After removing the value from left or right, the for loop
 	// breaks because array's lenght is 0. Therefore, we need to append
 	// the remaining values to it
-	if len(left) != 0 {
+	if leftLen != 0 {
 		sorted = append(sorted, left...)
 	}
 
-	if len(right) != 0 {
+	if rightLen != 0 {
 		sorted = append(sorted, right...)
 	}
 
@@ -49,8 +50,7 @@ func count(left []int, right []int) inversion {
 }
 
 // sort and count
-func inversions(input []int) inversion {
-	var length = len(input)
+func inversions(input []int, length int) inversion {
 
 	// The recursion goes all the way down
 	// until there is only one element in the input
@@ -64,11 +64,12 @@ func inversions(input []int) inversion {
 
 	// From the previous comment, here the
 	// array is divided in two pieces
-	left, right := split(input)
+	left, leftLen, right, rightLen := split(input, length)
 
-	var leftInversion = inversions(left)
-	var rightInversion = inversions(right)
-	var merged = count(leftInversion.sorted, rightInversion.sorted)
+	var leftInversion = inversions(left, leftLen)
+	var rightInversion = inversions(right, rightLen)
+
+	var merged = count(leftInversion.sorted, leftLen, rightInversion.sorted, rightLen)
 
 	var finalCount = leftInversion.count + rightInversion.count + merged.count
 

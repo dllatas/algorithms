@@ -1,4 +1,4 @@
-package main
+package inversion
 
 import (
 	"reflect"
@@ -29,7 +29,7 @@ func TestMergeSort(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got := inversions(tt.input)
+		got := inversions(tt.input, len(tt.input))
 
 		if !(reflect.DeepEqual(got.count, tt.want)) {
 			t.Errorf("got %v, want %v", got, tt.want)

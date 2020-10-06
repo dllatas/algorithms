@@ -3,6 +3,7 @@
 Go implementation of some classic algorithms.
 
 ### Index
+- [Data structures](#data-structures)
 - [Arrays and strings](#arrays-and-strings)
 - [Linked lists](#linked-lists)
 - [Stacks and queues](#stacks-and-queues)
@@ -12,6 +13,8 @@ Go implementation of some classic algorithms.
 - [Recursion](#recursion)
 - [Dynamic Programming](#dynamic-programming)
 
+#### Data structures
+- Linked list
 #### Arrays and strings
 - Permutation
 - Unique chars

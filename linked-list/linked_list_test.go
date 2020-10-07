@@ -6,16 +6,6 @@ import (
 	"testing"
 )
 
-/*func TestInsert(t *testing.T) {
-	for _, tt := range tests {
-		got := naive(tt.input)
-
-		if !(got == tt.want) {
-			t.Errorf("got %v, want %v", got, tt.want)
-		}
-	}
-}*/
-
 type Tests []struct {
 	input   int
 	want    []int
@@ -93,14 +83,16 @@ func TestGetPrevious(t *testing.T) {
 	}
 
 	for i := 0; i < len(tests)-1; i++ {
-		var prevList = GetPrevious(list, tests[i])
+		var found = Search(list, tests[i])
+		var prevList = GetPrevious(list, found)
 		if prevList.Value != tests[i+1] {
 			t.Errorf("got %v, want %v", prevList.Value, tests[i-1])
 		}
 	}
 
 	// Special case: Prev for first element
-	var prevList = GetPrevious(list, tests[len(tests)-1])
+	var found = Search(list, tests[len(tests)-1])
+	var prevList = GetPrevious(list, found)
 	if prevList != nil {
 		t.Errorf("got %v, want %v", prevList, nil)
 	}

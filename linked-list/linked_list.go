@@ -17,7 +17,19 @@ func NewList(v int) *List {
 	return list
 }
 
-// insert
+func NewListFromSlice(v []int) *List {
+	if len(v) == 0 {
+		return &List{Next: nil}
+	}
+
+	var list = NewList(v[0])
+	for i := 1; i < len(v); i++ {
+		list = Insert(list, v[i])
+	}
+
+	return list
+}
+
 func Insert(list *List, v int) *List {
 	var newList = NewList(v)
 
@@ -27,7 +39,6 @@ func Insert(list *List, v int) *List {
 	return list
 }
 
-// search
 func Search(list *List, v int) *List {
 	if list.Value == v {
 		return list
@@ -42,31 +53,51 @@ func Search(list *List, v int) *List {
 func Delete(list *List, v int) {
 	var listToDelete = Search(list, v)
 	if listToDelete != nil {
-		var prev = GetPrevious(list, v)
+		var prev = GetPrevious(list, listToDelete)
 		if prev == nil {
-			*list = *listToDelete.Next
+			if listToDelete.Next != nil {
+				*list = *listToDelete.Next
+			}
 		} else {
 			prev.Next = listToDelete.Next
 		}
 	}
 }
 
-// prev
-func GetPrevious(list *List, v int) *List {
+func GetPrevious(list *List, v *List) *List {
 	if list.Next == nil {
 		return nil
 	}
-	if list.Next.Value == v {
+
+	if list.Next == v {
 		return list
 	}
 	return GetPrevious(list.Next, v)
 }
 
-// print
-func Print(list *List) {
-	log.Println(list.Value)
-	if list.Next == nil {
-		return
+func GetValues(list *List) []int {
+	var value []int
+	var current = list
+	for {
+		value = append(value, current.Value)
+		if current.Next == nil {
+			break
+		}
+		current = current.Next
 	}
-	Print(list.Next)
+	return value
+}
+
+func Print(list *List) {
+	var value []List
+	var current = list
+	for {
+		value = append(value, *current)
+		if current.Next == nil {
+			break
+		}
+		current = current.Next
+	}
+
+	log.Printf("List: %v", value)
 }

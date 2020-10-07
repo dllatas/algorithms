@@ -18,12 +18,13 @@ func NewList(v int) *List {
 }
 
 func NewListFromSlice(v []int) *List {
-	if len(v) == 0 {
+	var size = len(v)
+	if size == 0 {
 		return &List{Next: nil}
 	}
 
 	var list = NewList(v[0])
-	for i := 1; i < len(v); i++ {
+	for i := 1; i < size; i++ {
 		list = Insert(list, v[i])
 	}
 
@@ -39,21 +40,20 @@ func Insert(list *List, v int) *List {
 	return list
 }
 
-func Search(list *List, v int) *List {
+func (list *List) Search(v int) *List {
 	if list.Value == v {
 		return list
 	}
 	if list.Next != nil {
-		return Search(list.Next, v)
+		return list.Next.Search(v)
 	}
 	return nil
 }
 
-// deletion
-func Delete(list *List, v int) {
-	var listToDelete = Search(list, v)
+func (list *List) Delete(v int) {
+	var listToDelete = list.Search(v)
 	if listToDelete != nil {
-		var prev = GetPrevious(list, listToDelete)
+		var prev = list.GetPrevious(listToDelete)
 		if prev == nil {
 			if listToDelete.Next != nil {
 				*list = *listToDelete.Next
@@ -64,7 +64,7 @@ func Delete(list *List, v int) {
 	}
 }
 
-func GetPrevious(list *List, v *List) *List {
+func (list *List) GetPrevious(v *List) *List {
 	if list.Next == nil {
 		return nil
 	}
@@ -72,10 +72,10 @@ func GetPrevious(list *List, v *List) *List {
 	if list.Next == v {
 		return list
 	}
-	return GetPrevious(list.Next, v)
+	return list.Next.GetPrevious(v)
 }
 
-func GetValues(list *List) []int {
+func (list *List) GetValues() []int {
 	var value []int
 	var current = list
 	for {
@@ -88,16 +88,26 @@ func GetValues(list *List) []int {
 	return value
 }
 
-func Print(list *List) {
+func (list *List) Print(mode string) {
 	var value []List
+	var valueRaw []*List
 	var current = list
 	for {
-		value = append(value, *current)
+		if mode == "raw" {
+			valueRaw = append(valueRaw, current)
+		} else {
+			value = append(value, *current)
+		}
 		if current.Next == nil {
 			break
 		}
 		current = current.Next
 	}
 
-	log.Printf("List: %v", value)
+	if mode == "raw" {
+		log.Printf("List Raw %v", valueRaw)
+	} else {
+		log.Printf("List: %v", value)
+
+	}
 }

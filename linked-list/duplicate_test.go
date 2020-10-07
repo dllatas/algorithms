@@ -24,6 +24,18 @@ func TestRemoveDuplicates(t *testing.T) {
 			input: []int{1, 2, 3, 4, 5, 6, 4},
 			want:  []int{6, 5, 4, 3, 2, 1},
 		},
+		{
+			input: []int{1, 2, 2, 1},
+			want:  []int{2, 1},
+		},
+		{
+			input: []int{2, 2, 2, 1},
+			want:  []int{1, 2},
+		},
+		{
+			input: []int{8, 7, 3, 5},
+			want:  []int{5, 3, 7, 8},
+		},
 	}
 
 	for _, test := range tests {
@@ -31,7 +43,7 @@ func TestRemoveDuplicates(t *testing.T) {
 		var list = NewListFromSlice(test.input)
 
 		RemoveDuplicates(list, buffer)
-		var got = GetValues(list)
+		var got = list.GetValues()
 
 		if !reflect.DeepEqual(got, test.want) {
 			t.Errorf("got %v, want %v", got, test.want)

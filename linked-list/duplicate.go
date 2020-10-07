@@ -11,7 +11,7 @@ func RemoveDuplicates(list *List, buffer map[int]bool) {
 func RemoveDuplicate(root *List, current *List, buffer map[int]bool) {
 	_, found := buffer[current.Value]
 	if found {
-		Delete(root, current.Value)
+		root.Delete(current.Value)
 	} else {
 		buffer[current.Value] = true
 	}

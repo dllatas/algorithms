@@ -6,43 +6,57 @@ import (
 	"testing"
 )
 
-func TestRemoveDuplicates(t *testing.T) {
-	type Tests []struct {
-		input []int
-		want  []int
-	}
-	var tests = Tests{
-		{
-			input: []int{1, 1},
-			want:  []int{1},
-		},
-		{
-			input: []int{1, 1, 2, 2},
-			want:  []int{2, 1},
-		},
-		{
-			input: []int{1, 2, 3, 4, 5, 6, 4},
-			want:  []int{6, 5, 4, 3, 2, 1},
-		},
-		{
-			input: []int{1, 2, 2, 1},
-			want:  []int{2, 1},
-		},
-		{
-			input: []int{2, 2, 2, 1},
-			want:  []int{1, 2},
-		},
-		{
-			input: []int{8, 7, 3, 5},
-			want:  []int{5, 3, 7, 8},
-		},
-	}
+type DuplicatesTests []struct {
+	input []int
+	want  []int
+}
 
-	for _, test := range tests {
+var duplicatedTests = DuplicatesTests{
+	{
+		input: []int{1, 1},
+		want:  []int{1},
+	},
+	{
+		input: []int{1, 1, 2, 2},
+		want:  []int{2, 1},
+	},
+	{
+		input: []int{1, 2, 3, 4, 5, 6, 4},
+		want:  []int{6, 5, 4, 3, 2, 1},
+	},
+	{
+		input: []int{3, 4, 4, 3},
+		want:  []int{4, 3},
+	},
+	{
+		input: []int{5, 5, 5, 6},
+		want:  []int{6, 5},
+	},
+	{
+		input: []int{8, 7, 3, 5},
+		want:  []int{5, 3, 7, 8},
+	},
+}
+
+func TestRemoveDuplicates(t *testing.T) {
+	for _, test := range duplicatedTests {
 		var buffer = make(map[int]bool)
 		var list = NewListFromSlice(test.input)
 
 		RemoveDuplicates(list, buffer)
+		var got = list.GetValues()
+
+		if !reflect.DeepEqual(got, test.want) {
+			t.Errorf("got %v, want %v", got, test.want)
+		}
+	}
+}
+
+func TestRemoveDuplicatesNoBuffer(t *testing.T) {
+	for _, test := range duplicatedTests {
+		var list = NewListFromSlice(test.input)
+
+		RemoveDuplicateNoBuffer(list)
 		var got = list.GetValues()
 
 		if !reflect.DeepEqual(got, test.want) {

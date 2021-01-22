@@ -1,4 +1,4 @@
-package linked_list
+package linkedlist
 
 import (
 	"log"
@@ -23,14 +23,15 @@ func NewListFromSlice(v []int) *List {
 		return &List{Next: nil}
 	}
 
-	var list = NewList(v[0])
-	for i := 1; i < size; i++ {
+	var list = NewList(v[size-1])
+	for i := size - 2; i >= 0; i-- {
 		list = Insert(list, v[i])
 	}
 
 	return list
 }
 
+// Insert -> adds at the beginning
 func Insert(list *List, v int) *List {
 	var newList = NewList(v)
 
@@ -76,7 +77,11 @@ func (list *List) GetPrevious(v *List) *List {
 }
 
 func (list *List) GetValues() []int {
-	var value []int
+	var value = make([]int, 0)
+	if list.Value == 0 && list.Next == nil {
+		return value
+	}
+
 	var current = list
 	for {
 		value = append(value, current.Value)

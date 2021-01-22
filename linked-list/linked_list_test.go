@@ -1,7 +1,6 @@
-package linked_list
+package linkedlist
 
 import (
-	//"log"
 	"reflect"
 	"testing"
 )
@@ -76,20 +75,21 @@ func TestGetPrevious(t *testing.T) {
 
 	var list = NewListFromSlice(tests)
 
-	for i := 0; i < len(tests)-1; i++ {
-		var found = list.Search(tests[i])
-		var prevList = list.GetPrevious(found)
-		if prevList.Value != tests[i+1] {
-			t.Errorf("got %v, want %v", prevList.Value, tests[i-1])
-		}
-	}
-
 	// Special case: Prev for first element
-	var found = list.Search(tests[len(tests)-1])
+	var found = list.Search(tests[0])
 	var prevList = list.GetPrevious(found)
 	if prevList != nil {
 		t.Errorf("got %v, want %v", prevList, nil)
 	}
+
+	for i := 1; i < len(tests)-1; i++ {
+		var found = list.Search(tests[i])
+		var prevList = list.GetPrevious(found)
+		if prevList.Value != tests[i-1] {
+			t.Errorf("got %v, want %v", prevList.Value, tests[i-1])
+		}
+	}
+
 }
 
 func TestDelete(t *testing.T) {

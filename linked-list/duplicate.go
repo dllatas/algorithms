@@ -1,14 +1,14 @@
-package linked_list
+package linkedlist
 
 import (
 //	"log"
 )
 
-func RemoveDuplicates(list *List, buffer map[int]bool) {
-	RemoveDuplicate(list, list, buffer)
+func removeDuplicates(list *List, buffer map[int]bool) {
+	removeDuplicate(list, list, buffer)
 }
 
-func RemoveDuplicate(root *List, current *List, buffer map[int]bool) {
+func removeDuplicate(root *List, current *List, buffer map[int]bool) {
 	_, found := buffer[current.Value]
 	if found {
 		root.Delete(current.Value)
@@ -20,27 +20,18 @@ func RemoveDuplicate(root *List, current *List, buffer map[int]bool) {
 		return
 	}
 
-	RemoveDuplicate(root, current.Next, buffer)
+	removeDuplicate(root, current.Next, buffer)
 }
 
-func RemoveDuplicateNoBuffer(list *List) {
+func removeDuplicateNoBuffer(list *List) {
 	var current *List
 
 	for {
-		//log.Println("--------new big iter----------")
 		var toRemove = list.Value
 		var removed = false
 		current = list
 
-		/*log.Printf("list: %v", list.GetValues())
-		log.Printf("toRemove: %v", toRemove)
-		log.Printf("current: %v", current.GetValues())*/
-
 		for {
-
-			/*log.Println("--------new small iter----------")
-			log.Printf("current: %v", current.GetValues())*/
-
 			if current.Next == nil {
 				break
 			}
@@ -48,8 +39,6 @@ func RemoveDuplicateNoBuffer(list *List) {
 			if toRemove == current.Next.Value {
 				list.Delete(toRemove)
 				removed = true
-				/*log.Printf("Deleted: %d", toRemove)
-				log.Printf("list: %v", list.GetValues())*/
 			}
 
 			if list.Next == nil {

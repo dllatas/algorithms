@@ -1,43 +1,28 @@
-package linked_list
+package linkedlist
 
-import (
-//	"log"
-)
-
-// seed = 0, returns last element
-// seed = 1, returns before last element
-
-func GetBeforeLast(list *List, seed int) *List {
-	var size = 0
-	var current = list
-
-	for {
-		size = size + 1
-		if current.Next == nil {
-			break
-		}
-		current = current.Next
+func (l *List) sliceToLast(from int) (int, *List) {
+	if from == 0 {
+		return 0, &List{}
 	}
 
-	var position = size - seed
-	if position == 0 {
-		return &List{
-			Next:  nil,
-			Value: 0,
-		}
+	if l.Next == nil {
+		return 1, l
 	}
 
-	var index = 1
-	var found = list
-
-	for {
-		if index == position {
-			break
-		}
-
+	index, value := l.Next.sliceToLast(from)
+	if index < from {
+		value = l
 		index = index + 1
-		found = found.Next
+		return index, value
 	}
 
-	return found
+	return index, value
+}
+
+func (l *List) length() int {
+	if l.Next == nil {
+		return 1
+	}
+	var length = l.Next.length()
+	return length + 1
 }

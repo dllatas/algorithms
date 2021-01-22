@@ -1,45 +1,85 @@
-package linked_list
+package linkedlist
 
 import (
 	"reflect"
 	"testing"
 )
 
-type SliceTest []struct {
-	seed  int
+type SliceToLastTest []struct {
+	from  int
+	input *List
+	want  []int
+}
+
+func TestSliceToLast(t *testing.T) {
+	var tests = SliceToLastTest{
+		{
+			from:  0,
+			input: NewListFromSlice([]int{5, 4, 3}),
+			want:  []int{},
+		},
+		{
+			from:  1,
+			input: NewListFromSlice([]int{5, 4, 6}),
+			want:  []int{6},
+		},
+		{
+			from:  2,
+			input: NewListFromSlice([]int{5, 4, 6}),
+			want:  []int{4, 6},
+		},
+		{
+			from:  3,
+			input: NewListFromSlice([]int{5, 4, 6}),
+			want:  []int{5, 4, 6},
+		},
+		{
+			from:  5,
+			input: NewListFromSlice([]int{5, 4, 6}),
+			want:  []int{5, 4, 6},
+		},
+	}
+
+	for i, test := range tests {
+		_, list := test.input.sliceToLast(test.from)
+		var got = list.GetValues()
+		if !reflect.DeepEqual(got, test.want) {
+			t.Errorf("(%d) got %v, want %v", i, got, test.want)
+		}
+	}
+}
+
+type LengthTest []struct {
 	input []int
+	list  *List
 	want  int
 }
 
-func TestSlice(t *testing.T) {
-	var tests = SliceTest{
+func TestLength(t *testing.T) {
+	var tests = LengthTest{
 		{
-			seed:  0,
-			input: []int{5, 4, 3},
-			want:  5,
+			input: []int{5, 4, 6},
 		},
 		{
-			seed:  1,
-			input: []int{5, 4, 6},
-			want:  4,
+			input: []int{},
 		},
 		{
-			seed:  2,
-			input: []int{5, 4, 6},
-			want:  6,
-		},
-		{
-			seed:  3,
-			input: []int{5, 4, 6},
-			want:  0,
+			input: []int{1, 2, 3, 4, 5, 6, 7, 8},
 		},
 	}
 
 	for _, test := range tests {
-		var list = NewListFromSlice(test.input)
-		var sliced = GetBeforeLast(list, test.seed)
-		if !reflect.DeepEqual(sliced.Value, test.want) {
-			t.Errorf("got %v, want %v", sliced.Value, test.want)
+		test.list = NewListFromSlice(test.input)
+
+		var length = len(test.input)
+		test.want = length
+		if length == 0 {
+			test.want = 1
+		}
+
+		var got = test.list.length()
+		if got != test.want {
+			t.Errorf("got %v, want %v", got, test.want)
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package trees
 
 import (
-	//"log"
 	"errors"
+	"log"
 	//	"math"
 	//	"fmt"
 )
@@ -110,4 +110,13 @@ func Max(a, b int) int {
 		return a
 	}
 	return b
+}
+
+func (t *BinarySearchTree) describe() {
+	if t == nil {
+		return
+	}
+	t.Left.describe()
+	t.Right.describe()
+	log.Printf("%p -> %+v", t, t)
 }

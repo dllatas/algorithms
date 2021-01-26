@@ -1,4 +1,4 @@
-package linkedlist
+package list
 
 func (l *List) sliceToLast(from int) (int, *List) {
 	if from == 0 {

@@ -1,4 +1,8 @@
-### String has all unique chars
+### Exercises
+- "Is unique" [Laakmann] Page 90, 1.1.
+- "Check Permutation" [Laakmann] Page 90, 1.2.
+
+#### "Is unique"
 TODO: Add run time complexity
 TODO: Add space complexity
 TODO: General idea. The good, the bad, the ugly.
@@ -7,7 +11,7 @@ No extra data structures
 Bit Vector (#117)
 Sorting (#132)
 
-### Check if two strings are permutation
+#### "Check Permutation"
 
 A Permutation of a string is another string that contains same characters, only the order of characters can be different. For example, “abcd” and “dabc” are Permutation of each other.
 - Geeks for geeks

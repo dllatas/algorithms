@@ -1,8 +1,33 @@
-package fibonnaci
+package dynamic
 
 import (
 	"log"
 )
+
+// bottom-up
+func dynamic(input int) int {
+	if input == 0 {
+		return input
+	}
+
+	var prevIter = 1
+	var beforePrevIter = 0
+
+	for iter := 2; iter < input; iter++ {
+		var currentIter = prevIter + beforePrevIter
+		beforePrevIter = prevIter
+		prevIter = currentIter
+	}
+
+	return prevIter + beforePrevIter
+}
+
+func recursive(input int) int {
+	if input == 0 || input == 1 {
+		return input
+	}
+	return recursive(input-1) + recursive(input-2)
+}
 
 // top-down
 func memoizationMain(input int, debug bool) int {

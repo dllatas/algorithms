@@ -1,4 +1,4 @@
-package fibonnaci
+package dynamic
 
 import (
 	"log"

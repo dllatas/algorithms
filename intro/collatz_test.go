@@ -1,4 +1,4 @@
-package collatz
+package intro
 
 import (
 	"reflect"

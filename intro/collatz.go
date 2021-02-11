@@ -1,4 +1,4 @@
-package collatz
+package intro
 
 func collatz(input int) (int, []int) {
 	if input == 1 {

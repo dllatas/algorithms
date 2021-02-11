@@ -2,6 +2,11 @@
 
 Go implementation of some classic algorithms.
 
+### References
+
+[Laakmann] Laakmann, G., 2015. Cracking the Coding Interview, 6th Edition. CareerCup.
+[Skienna] S, S., 2010. The Algorithm Design Manual. Springer London.
+
 ### Index
 - [Data structures](#data-structures)
 - [Arrays and strings](#arrays-and-strings)

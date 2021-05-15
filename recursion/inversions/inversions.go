@@ -1,12 +1,12 @@
 package inversion
 
 type inversion struct {
-	sorted []int
-	count  int
+	sorted []int32
+	count  int64
 }
 
-func split(input []int, length int) ([]int, int, []int, int) {
-	var pivot = length / 2
+func split(input []int32, length int64) ([]int32, int64, []int32, int64) {
+	var pivot int64 = length / int64(2)
 
 	var left = input[:pivot]
 	var right = input[pivot:]
@@ -14,10 +14,9 @@ func split(input []int, length int) ([]int, int, []int, int) {
 	return left, pivot, right, length - pivot
 }
 
-// sort and merge happen at the same time
-func count(left []int, leftLen int, right []int, rightLen int) inversion {
-	var sorted []int
-	var count = 0
+func count(left []int32, leftLen int64, right []int32, rightLen int64) inversion {
+	var sorted []int32
+	var count int64 = 0
 
 	for !(leftLen == 0 || rightLen == 0) {
 		if left[0] <= right[0] {
@@ -49,8 +48,7 @@ func count(left []int, leftLen int, right []int, rightLen int) inversion {
 	}
 }
 
-// sort and count
-func inversions(input []int, length int) inversion {
+func inversions(input []int32, length int64) inversion {
 
 	// The recursion goes all the way down
 	// until there is only one element in the input

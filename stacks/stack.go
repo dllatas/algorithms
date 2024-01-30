@@ -43,6 +43,13 @@ func (s *Stack) push(el *Element) {
 	s.size = s.size + 1
 }
 
+func (s *Stack) add(value string, position int) {
+	var el = NewElement(value, position)
+
+	s.values = append(s.values, el)
+	s.size = s.size + 1
+}
+
 func (s *Stack) pop() *Element {
 	if s.size == 0 {
 		return NewElement("", s.size)
@@ -53,6 +60,27 @@ func (s *Stack) pop() *Element {
 
 	s.values = s.values[0:lastIndex]
 	s.size = s.size - 1
+
+	return last
+}
+
+func (s *Stack) popo() {
+	if s.size == 0 {
+		return
+	}
+
+	var lastIndex = s.size - 1
+	s.values = s.values[0:lastIndex]
+	s.size = s.size - 1
+}
+
+func (s *Stack) last() *Element {
+	if s.size == 0 {
+		return NewElement("", s.size)
+	}
+
+	var lastIndex = s.size - 1
+	var last = s.values[lastIndex]
 
 	return last
 }
